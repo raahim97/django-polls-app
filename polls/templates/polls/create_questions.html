@@ -1,0 +1,82 @@
+
+{% load static %}
+
+<html lang="en">
+<head>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Create Questions</title>
+</head>
+<body>
+    <div id = "create_poll">
+        <form method = "post" name = "create_poll" enctype="application/form-data">
+        {% csrf_token %}
+
+            <div class = "question" >
+                <h2>Enter your question: </h2>
+                <textarea name = "question"></textarea>
+            </div>
+
+            <div id = "choices">
+                <input type = "text" placeholder = "Enter Choice" name = "choices" class = "form-control"/>
+                <br>
+            </div>
+
+            <button type="button" id="add_fields" >Add Choice</button>
+
+            <input type="submit" id="submit_poll" value = "Create Poll"/>
+        </form>
+    </div>
+</body>
+
+<script type ="text/javascript">
+ var number = 1;
+function addFields(number){
+    // Number of inputs to create
+
+    console.log("numbers of time function called" + number)
+    // Container <div> where dynamic content will be placed
+    var container = document.getElementById("choices");
+    // Clear previous contents of the container
+   // while (container.hasChildNodes()) {
+   //     container.removeChild(container.lastChild);
+   // }
+    if (number > 10){
+      alert("Maximum members can be 10");
+    }
+    else {
+
+          // Append a node with a random text
+          // container.appendChild(document.createTextNode("Member " + (i)));
+          // Create an <input> element, set its type and name attributes
+          var input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = "Please choice";
+          input.name = "choices";
+          input.className = "form-control";
+          container.appendChild(input);
+          // Append a line break
+          container.appendChild(document.createElement("br"));
+
+
+    // container.appendChild(document.createElement("button"));
+
+    }
+}
+$(document).ready(function(){
+
+console.log("Inside JS");
+$("#add_fields").click(function(){
+
+
+    console.log("Add field clicked");
+    number+=1;
+    addFields(number);
+
+});
+});
+
+
+
+</script>
+</html>

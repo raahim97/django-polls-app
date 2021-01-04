@@ -1,0 +1,147 @@
+{%  extends 'accounts/basic.html' %}
+{% comment %} {% block navbar %}
+<!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color:#020230;background-image:linear-gradient(180deg,#020230,#020230 100%);background-size:cover">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'normal_user' %}">
+                <div class="brand-wrapper">
+                    <img src="/static/images/iqracity_2.png" alt="logo" class="logo" style="width: 100%; height:100%;">
+                </div>
+                <!-- <div class="sidebar-brand-text mx-3">{{request.user.first_name}}</div> -->
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'normal_user' %}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                Rooms Information
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'CreateNewRoom' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Create New Room</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'RoomsForNormalUser' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Rooms</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+            <!-- Sidebar Message -->
+            
+
+        </ul>
+{% endblock %} {% endcomment %}
+{% block ContentRow %}
+{% load static %}
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Create New Room</h6>
+        </div>
+        <form method="POST" name="myform">
+          {% csrf_token %}
+          <div class="card-body">
+              <div class="table-responsive">
+              <table class="table table-borderless" id="dataTable" width="100%" cellspacing="0">
+                  <td class="m-2">Room Name</td>
+                  <td>
+                      <input type="text" class="form-control" name="room_name" placeholder="Enter room name.." required>
+                  </td>
+              
+              </table>
+              </div>
+  
+              <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Add Participants</h6>
+              </div>
+                <input type="text" id="member" name="member" value="" class="form-control m-2" placeholder="Number of members: (max. 10)"><br />
+                <center><a class="btn btn-md btn-outline-primary mb-2" id="filldetails" onclick="addFields()">Enter</a></center>
+                <div id="container">
+                  {% csrf_token %}
+                    <!-- <center><button href="#" type="submit" name="create" class="btn btn-success btn-icon-split">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span class="text">Create</span>
+                    </button>
+                </center> -->
+                </div>
+              
+          </div>
+          </form>
+      </div>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type ="text/javascript">
+function addFields(){
+    // Number of inputs to create
+    var number = document.getElementById("member").value;
+    // Container <div> where dynamic content will be placed
+    var container = document.getElementById("container");
+    // Clear previous contents of the container
+    while (container.hasChildNodes()) {
+        container.removeChild(container.lastChild);
+    }
+    if (number > 10){
+      alert("Maximum members can be 10");
+    }
+    else {
+      for (i=1;i<=number;i++){
+          // Append a node with a random text
+          // container.appendChild(document.createTextNode("Member " + (i)));
+          // Create an <input> element, set its type and name attributes
+          var input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = "Please enter email of member" +i;
+          input.name = "members";
+          input.className = "form-control";   
+          container.appendChild(input);
+          // Append a line break 
+          container.appendChild(document.createElement("br"));
+      }
+    
+    // container.appendChild(document.createElement("button"));
+    var btn = document.createElement("input");
+    btn.type = "submit";
+    btn.name = "create";
+    btn.value = "Create";
+    btn.style = "align: center;";
+    btn.className = "btn btn-lg btn-outline-success";
+    container.appendChild(btn);
+    }
+}
+$(document).ready(function(){
+ 	console.log("Inside JS");
+ 	$("#create").click(function(){
+ 		console.log("Start Button Clicked");
+
+ 		$.post("{% url 'CreateNewRoom' %}", {
+ 			'csrfmiddlewaretoken': '{{ csrf_token }}'
+ 		},
+
+ 		function(data, status){
+ 			//alert("Data: "+ data['response'] + "\nStatus: " + status);
+ 		});
+ 	});
+ });
+</script>
+{% endblock %}
